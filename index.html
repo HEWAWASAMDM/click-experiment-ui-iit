@@ -195,13 +195,16 @@
 						};
 
 						// 2. Hand the data to our PHP waiter!
-						fetch('saveTaps.php', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(dataForPHP) 
-						})
+						function saveTap(tapData) {
+    db.collection("tap_logs").add({
+        sequence: tapData.sequence,
+        start_time: tapData.start_time,
+        end_time: tapData.end_time,
+        interface: tapData.interface,
+        session_id: tapData.session_id,
+        device_platform: tapData.device_platform,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
 						.then(response => response.text()) 
 						.then(data => {
 							console.log("Server Response:", data); // Print what PHP says!
